@@ -1,0 +1,24 @@
+package life.genny.rules;
+
+import org.jboss.logging.Logger;
+
+rule "Test Rule 1" 
+ruleflow-group "DataProcessing"
+
+when
+    str: String(str.equals("HELLO"))
+	log: Logger()
+then
+    System.out.println("Hello Found");
+	log.info("Printing to logger");
+end
+
+rule "Test Rule 2" 
+ruleflow-group "DataProcessing"
+
+when
+    str: String(!str.equals("HELLO"))
+then
+    System.out.println("Hello NOT Found");
+end
+
