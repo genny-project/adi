@@ -18,7 +18,8 @@ import org.kie.kogito.legacy.rules.KieRuntimeBuilder;
 
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.reactive.messaging.annotations.Blocking;
-
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
 import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.utils.BaseEntityUtils;
 import life.genny.serviceq.Service;
@@ -58,8 +59,10 @@ public class InternalConsumer {
 
         log.infov("Incoming Valid Data : {}", data);
         Instant start = Instant.now();
-        GennyToken userToken = null;
+
 		BaseEntityUtils beUtils = service.getBeUtils();
+		GennyToken serviceToken = beUtils.getServiceToken();
+		GennyToken userToken = null;
 
         // deserialise to JsonObject
         JsonObject json = jsonb.fromJson(data, JsonObject.class);
@@ -85,16 +88,31 @@ public class InternalConsumer {
         // update the token of our utility
         beUtils.setGennyToken(userToken);
 
+		String sourceCode = json.getString("sourceCode");
+		String targetCode = json.getString("targetCode");
+		String attributeCode = json.getString("attributeCode");
+		String value = json.getString("value");
+
+		Answer answer = new Answer(sourceCode, targetCode, attributeCode, value);
+		Answers answersToSave = new Answers();
+
         // init session and activate DataProcessing
         KieSession ksession = ruleRuntime.newKieSession();
         ((InternalAgenda) ksession.getAgenda()).activateRuleFlowGroup("DataProcessing");
 
         // insert facts into session
-        ksession.insert(beUtils);
+		ksession.insert(beUtils);
+        ksession.insert(serviceToken);
+        ksession.insert(userToken);
+		ksession.insert(answer);
+		ksession.insert(answersToSave);
 
         // fire rules and dispose of session
         ksession.fireAllRules();
         ksession.dispose();
+
+		// TODO: ensure that answersToSave has been updated by our rules
+		beUtils.saveAnswers(answersToSave);
 
         Instant end = Instant.now();
         log.info("Duration = " + Duration.between(start, end).toMillis() + "ms");
