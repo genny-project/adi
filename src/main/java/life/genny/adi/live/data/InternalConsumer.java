@@ -13,6 +13,9 @@ import java.time.Instant;
 import org.drools.core.common.InternalAgenda;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.jboss.logging.Logger;
+import org.kie.api.KieServices;
+import org.kie.api.builder.KieBuilder;
+import org.kie.api.builder.KieFileSystem;
 import org.kie.api.runtime.KieSession;
 import org.kie.kogito.legacy.rules.KieRuntimeBuilder;
 
@@ -45,6 +48,7 @@ public class InternalConsumer {
     void onStart(@Observes StartupEvent ev) {
 
 		service.fullServiceInit();
+		// loadRules();
 		log.info("[*] Finished Startup!");
     }
 
@@ -117,4 +121,17 @@ public class InternalConsumer {
         Instant end = Instant.now();
         log.info("Duration = " + Duration.between(start, end).toMillis() + "ms");
     }
+
+	/**
+	* Load rules into kie.
+	*
+	* NOTE: Still a work in progress.
+	 */
+	public static void loadRules() {
+
+		KieServices kieServices = KieServices.Factory.get();
+		KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
+		KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
+		kieBuilder.buildAll();
+	}
 }
