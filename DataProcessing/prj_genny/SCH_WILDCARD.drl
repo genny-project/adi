@@ -1,0 +1,36 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+
+rule "SCH_WILDCARD"
+ruleflow-group 'DataProcessing'
+salience 550 
+when
+	beUtils : BaseEntityUtils()
+	serviceToken : GennyToken( code == "PER_SERVICE") 
+	answer : Answer( attributeCode == "SCH_WILDCARD" )
+	answersToSave : Answers()
+then
+	System.out.println("Rule -> SCH_WILDCARD :  user=" + beUtils.getGennyToken().getUserCode()+" : "+answer); 
+	String sourceCode = beUtils.getGennyToken().getUserCode();
+
+	/* only for source user */
+	if (sourceCode.equals(answer.getSourceCode())) {
+		String targetCode = answer.getTargetCode();
+
+		SearchEntity searchBE = CacheUtils.getObject(beUtils.getGennyToken().getRealm(), targetCode, SearchEntity.class);
+		searchBE.setWildcard(answer.getValue());
+		CacheUtils.putObject(beUtils.getGennyToken().getRealm(), searchBE.getCode(), searchBE);
+
+		SearchUtils.searchTable(beUtils, searchBE);
+	}
+
+	retract(answer);
+	update(answersToSave);
+end

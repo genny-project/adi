@@ -1,0 +1,32 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+
+rule "PRI_TRADING_NAME"
+ruleflow-group 'DataProcessing'
+salience 500 
+when
+	beUtils : BaseEntityUtils()
+	serviceToken : GennyToken( code == "PER_SERVICE") 
+	answer : Answer( attributeCode == "PRI_TRADING_NAME" )
+	answersToSave : Answers()
+then
+	System.out.println("Rule -> PRI_TRADING_NAME :  user=" + beUtils.getGennyToken().getUserCode()+" : "+answer); 
+	String sourceCode = beUtils.getGennyToken().getUserCode();
+	String targetCode = answer.getTargetCode();
+	
+	/* Parse json answer and save the individual answers */
+	BaseEntity company = beUtils.getBaseEntityByCode(targetCode);
+	
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_TRADING_NAME", answer.getValue(),false,false));			
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_NAME", answer.getValue(),false,true));	
+
+	retract(answer);
+	update(answersToSave);
+end

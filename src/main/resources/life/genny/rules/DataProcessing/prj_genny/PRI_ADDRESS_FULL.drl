@@ -1,0 +1,108 @@
+package life.genny.rules;
+
+import java.util.Optional;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+import life.genny.qwandaq.models.GennySettings;
+
+rule "PRI_ADDRESS_FULL"
+ruleflow-group 'DataProcessing'
+	salience 500
+when
+	beUtils : BaseEntityUtils()
+	serviceToken : GennyToken( code == "PER_SERVICE")
+	userToken : GennyToken( code != "PER_SERVICE")
+	answer : Answer( attributeCode == "PRI_ADDRESS_FULL" )
+	answersToSave : Answers()
+	jsonb : Jsonb()
+then
+	System.out.println("Rule -> PRI_ADDRESS_FULL :  user=" + beUtils.getGennyToken().getUserCode()+" : "+answer);
+	String sourceCode = beUtils.getGennyToken().getUserCode();
+	String targetCode = answer.getTargetCode();
+
+
+	JsonObject addressDataJson = jsonb.fromJson(answer.getValue(), JsonObject.class);
+	String postcode = addressDataJson.getString("postal_code");
+	if (postcode == null) {
+		postcode = addressDataJson.getString("postcode");
+	}
+
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_JSON", answer.getValue(),false,true));
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_COUNTRY", addressDataJson.getString("country"),false,true));
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_POSTCODE",postcode,false,true));
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_SUBURB", addressDataJson.getString("suburb"),false,true));
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_CITY", addressDataJson.getString("suburb"),false,true));
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_STATE", addressDataJson.getString("state"),false,true));
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_ADDRESS1", addressDataJson.getString("street_address"),false,true));
+
+	String address = addressDataJson.getString("full_address");
+
+	/* check if PRI_ADDRESS_EXTRA exists */
+	BaseEntity targetBe = beUtils.getBaseEntityByCode(targetCode);
+	if(targetBe != null){
+
+		Optional<String> optAddressExtra = targetBe.getValue("PRI_ADDRESS_EXTRA");
+		if (optAddressExtra.isPresent()){
+			System.out.println("PRI_ADDRESS_EXTRA is present");
+			String addressExtra = optAddressExtra.get().trim();
+			System.out.println("addressExtra  :: " + addressExtra);
+
+			if(!addressExtra.isEmpty()){
+				System.out.println("PRI_ADDRESS_EXTRA is NOT EMPTY");
+				address = addressExtra + "/" + address;
+			}
+			System.out.println("address  :: " + address);
+
+		}else{
+			System.out.println("PRI_ADDRESS_EXTRA is NOT present");
+		}
+	}
+
+	Answer addressFull = new Answer(sourceCode, targetCode, "PRI_ADDRESS_FULL", address, false, false);
+	answersToSave.add(addressFull);
+	QwandaUtils.sendToFrontEnd(userToken, addressFull);
+
+	/*answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_JSON", answer.getValue(),false,true));
+	  answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_COUNTRY", addressDataJson.getString("country"),false,true));
+	  answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_POSTCODE",postcode,false,true));
+	  answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_SUBURB", addressDataJson.getString("suburb"),false,true));
+	  answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_CITY", addressDataJson.getString("suburb"),false,true));
+	  answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_STATE", addressDataJson.getString("state"),false,true));
+	  answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_ADDRESS1", addressDataJson.getString("street_address"),false,true));
+	  answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_FULL", addressDataJson.getString("full_address"),false,true));
+	 */
+
+	Double latitude = addressDataJson.getJsonNumber("latitude").doubleValue();
+	Double longitude = addressDataJson.getJsonNumber("longitude").doubleValue();
+
+
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_LATITUDE", latitude+"",false,true));
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_ADDRESS_LONGITUDE", longitude+"",false,true));
+
+
+	/* update timezone from GPS */
+	BaseEntity project = beUtils.getBaseEntityByCode("PRJ_"+serviceToken.getRealm().toUpperCase());
+	String googleApiKey = project.getValueAsString("ENV_GOOGLE_MAPS_APIKEY");
+	String url = "https://maps.googleapis.com/maps/api/timezone/json?location="+latitude+","+longitude+"&timestamp="+java.time.Instant.now().getEpochSecond()+"&key="+googleApiKey;
+
+	url = GennySettings.projectUrl+"/googleapi/v1/timezone?location="+latitude+","+longitude+"&timestamp="+java.time.Instant.now().getEpochSecond();
+	System.out.println("GennyProxy url = "+url);
+	String timezoneJsonStr = HttpUtils.get(url , userToken.getToken()).body();
+	System.out.println("timezoneJsonStr = " + timezoneJsonStr);
+
+	Answer fixedTimezone = new Answer(sourceCode,targetCode, "PRI_TIMEZONE_ID", timezoneJsonStr,false,true);
+	answersToSave.add(fixedTimezone);
+	Answer fixedTimezoneOld = new Answer(sourceCode,targetCode, "PRI_TIME_ZONE", timezoneJsonStr,false,true);
+	answersToSave.add(fixedTimezoneOld);
+	QwandaUtils.sendToFrontEnd(userToken, fixedTimezone);
+	QwandaUtils.sendToFrontEnd(userToken, fixedTimezoneOld);
+
+	retract(answer);
+	update(answersToSave);
+end

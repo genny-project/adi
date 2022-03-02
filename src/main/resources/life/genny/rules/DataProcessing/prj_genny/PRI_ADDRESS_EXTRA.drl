@@ -1,0 +1,58 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+
+rule "HELPER_PRI_ADDRESS_EXTRA"
+ruleflow-group 'DataProcessing'
+salience 5000
+when
+	beUtils : BaseEntityUtils()
+	answer : Answer( attributeCode == "PRI_ADDRESS_EXTRA")
+	serviceToken : GennyToken( code == "PER_SERVICE")
+	userToken : GennyToken( code != "PER_SERVICE")
+then
+	System.out.println(drools.getRule().getName() + " triggered");
+	
+	String sourceCode = beUtils.getGennyToken().getUserCode();
+	System.out.println("sourceCode :: " + sourceCode);
+	
+	String targetCode = answer.getTargetCode();
+	System.out.println("targetCode :: " + targetCode);
+	
+	String addressExtra = answer.getValue().trim();
+	System.out.println("addressExtra :: " + addressExtra);
+
+	BaseEntity be = beUtils.getBaseEntityByCode(targetCode);
+	if(be != null){
+		Optional<String> optAddress = be.getValue("PRI_ADDRESS_FULL");
+		if (optAddress.isPresent()){
+			String address = optAddress.get().trim();
+			System.out.println("PRI_ADDRESS_FULL is present");
+			
+			if(!address.isEmpty()){
+				System.out.println("PRI_ADDRESS_FULL is NOT EMPTY");
+
+				/* Check if the extra address field exists  */
+				int index = address.indexOf("/");
+				if(index >= 0){
+					System.out.println("PRI_ADDRESS_FULL before ::  " + address);
+					/* Remove the extra address field if it exists  */
+					address = address.substring(index+1).trim();
+				}
+				
+				/* add the new extra field to the adress */
+				address = addressExtra + "/" + address;
+				System.out.println("PRI_ADDRESS_FULL ::  " + address);
+
+				Answer addressAnswer = new Answer(sourceCode, targetCode, "PRI_ADDRESS_FULL", address);
+				beUtils.saveAnswer(addressAnswer);
+				QwandaUtils.sendToFrontEnd(userToken, addressAnswer);
+			}
+		}
+	}
+end

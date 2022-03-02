@@ -1,0 +1,63 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+
+rule "SEARCH_FIELD_ASSIST"
+ruleflow-group 'DataProcessing'
+salience 50000
+no-loop true
+when
+	beUtils : BaseEntityUtils()
+	allowed : Allowed(code == "USER") 
+	answer : Answer(  (attributeCode matches "PRI_SEARCH_TEXT") && (!(attributeCode  matches "SRT_.*")) && targetCode matches "SBE_.*"  && (!value.startsWith("!")))   
+	userToken : GennyToken (code != "PER_SERVICE" )
+	serviceToken : GennyToken( code == "PER_SERVICE")
+	ruleDetails : RuleDetails()
+then
+	System.out.println("Rule -> "+drools.getRule().getName()+" :  user=" + beUtils.getGennyToken().getUserCode()+" : "+answer);
+	retract(answer);
+
+	Boolean cache = true;
+
+	String searchCode = answer.getTargetCode();
+	String attributeCode = answer.getAttributeCode();
+	String filterValue = answer.getValue();
+
+	/* TODO HACK */
+	if ("PRI_ADDRESS_STATE".equals(attributeCode)) {
+		switch (filterValue) {
+			case "WA":  filterValue = "Western Australia"; break;
+			case "SA":  filterValue = "South Australia"; break;
+			case "VIC": filterValue = "Victoria"; break;
+			case "TAS": filterValue = "Tasmania"; break;
+			case "NSW": filterValue = "New South Wales"; break;
+			case "ACT": filterValue = "Australian Capital Territory"; break;
+			case "NT":  filterValue = "Northern Territory"; break;
+			case "QLD": filterValue = "Queensland"; break;
+		}
+	}
+
+	/* TODO: Check against existing and public attributeCodes for the target */	
+
+	/* get current search */
+	System.out.println("Realm is "+beUtils.getGennyToken().getRealm());
+	SearchEntity searchBE = CacheUtils.getObject(beUtils.getGennyToken().getRealm(), searchCode, SearchEntity.class);
+	/* System.out.println("SearchBE  is  "+searchBE); */
+
+	System.out.println(drools.getRule().getName()+" SEARCH ASSIST for "+searchBE.getCode() + " with attribute Code "+attributeCode+" and value "+filterValue); 
+
+	/*Answer answer2 = new Answer(beUtils.getGennyToken().getUserCode(),searchCode,attributeCode,filterValue); */
+	System.out.println("About to set attributeValue in BE");
+	searchBE.setValue(attributeCode,filterValue);
+	System.out.println("About to save searchBE to cache");
+	CacheUtils.putObject(beUtils.getGennyToken().getRealm(), searchCode, searchBE);
+
+	System.out.println("About to search");
+	SearchUtils.searchTable(beUtils, searchBE);
+end

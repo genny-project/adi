@@ -1,0 +1,141 @@
+package life.genny.rules;
+
+import java.util.List;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.utils.KafkaUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.entity.SearchEntity;
+import life.genny.qwandaq.EEntityStatus;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+import life.genny.qwandaq.message.QDataBaseEntityMessage;
+import life.genny.qwandaq.message.QCmdMessage;
+
+rule "PRI_EMAIL"
+ruleflow-group 'DataProcessing'
+salience 5000 
+no-loop true
+when
+	beUtils : BaseEntityUtils()
+	answer : Answer( attributeCode == "PRI_EMAIL" && value != "")
+	serviceToken : GennyToken( code == "PER_SERVICE")
+	userToken : GennyToken( code != "PER_SERVICE")
+	answersToSave : Answers()
+	ruleDetails : RuleDetails()
+	allowed: Allowed((code == "USER") || (code == "EDIT_INTERN") || (code == "EDIT_HCR") || (code == "EDIT_EPR") || (code == "EDIT_REF_PART_REP") || (code == "EDIT_AGENT"))	  	
+then
+	System.out.println(ruleDetails+" "+drools.getRule().getName()+"   user=" + beUtils.getGennyToken().getUserCode()+" : "+answer); 
+	
+	String sourceCode = beUtils.getGennyToken().getUserCode();
+	String targetCode = answer.getTargetCode();
+	String duplicateCodes = null;
+	String number = null; 
+	
+	/* check if email is already in use for a person */
+	SearchEntity searchBE = new SearchEntity(drools.getRule().getName(), "Email People")
+			.addFilter("PRI_CODE", SearchEntity.StringFilter.LIKE, "PER_%") 
+			.addFilter("PRI_EMAIL", SearchEntity.StringFilter.EQUAL, answer.getValue()) 
+			.setSearchStatus(EEntityStatus.PENDING)
+			.addColumn("PRI_NAME", "Name")
+			.setPageStart(0)
+			.setPageSize(100);
+	
+	searchBE.setRealm(beUtils.getServiceToken().getRealm());
+		
+	Long count = beUtils.getBaseEntityCount(searchBE);
+
+	System.out.println(ruleDetails+" "+drools.getRule().getName()+"  Search EMAIL result is "+count);
+
+	if (count == 0) {
+		System.out.println(ruleDetails+" "+drools.getRule().getName()+"  This email "+answer.getValue()+" is unique");
+
+		/* Now sync to their keycloak account */
+		BaseEntity target = beUtils.getBaseEntityByCode(answer.getTargetCode());
+		if ((answer.getTargetCode().startsWith("PER_")) && (target != null)) {
+
+			Boolean allowedToChange = false;
+			if (userToken.getUserCode().equals(answer.getTargetCode())) {
+				allowedToChange = true;
+			}
+			System.out.println(ruleDetails+" "+drools.getRule().getName()+" the allowed.code is "+allowed.code);
+
+			/* check if capability to change passwords is there */
+			switch (allowed.code) {
+				case "USER": {allowedToChange = true;} break;
+				case "EDIT_INTERN": {allowedToChange = true;} break;
+				case "EDIT_AGENT":  {allowedToChange = true;} break;
+				case "EDIT_HCR":    {allowedToChange = true;} break;
+				case "EDIT_EPR":    {allowedToChange = true;} break;
+				case "EDIT_REF_PART_REP": {allowedToChange = true;} break;
+			}
+
+			if (allowedToChange) {
+				int statusCode = KeycloakUtils.updateUserEmail(userToken, target, answer.getValue());
+				System.out.println(ruleDetails+" "+drools.getRule().getName()+"  Changing email for "+answer.getTargetCode()+" to "+answer.getValue()+" statusCode="+statusCode);
+
+				if (statusCode > 204) {
+					System.out.println(ruleDetails+" "+drools.getRule().getName()+"  Error in setting email."+answer.getTargetCode()+" to "+answer.getValue()+" statusCode="+statusCode);
+				} else {
+					System.out.println(ruleDetails+" "+drools.getRule().getName()+"  Saving the good email");
+					Answer goodEmail = new Answer(answer.getSourceCode(), answer.getTargetCode(), "PRI_EMAIL", answer.getValue());
+					answersToSave.add(goodEmail);
+				}
+			}
+		}	
+
+	} else {
+		if(true /*allowed.code.equals("AGENT")*/) { /* TODO , why limit this to agents??? */
+			List<BaseEntity> duplicateBes = beUtils.getBaseEntitys(searchBE);
+			System.out.println(ruleDetails+" "+drools.getRule().getName()+"  duplicateBE's: " + duplicateBes);
+
+			QDataBaseEntityMessage msg = new QDataBaseEntityMessage(duplicateBes);
+			msg.setToken(userToken.getToken());
+			msg.setReplace(true);
+			KafkaUtils.writeMsg("webcmds", msg);
+
+			for (BaseEntity duplicateBe : duplicateBes) {
+				System.out.println(ruleDetails+" "+drools.getRule().getName()+"  duplicateBe: " + duplicateBe);
+				duplicateCodes = duplicateCodes + "," + duplicateBe.getCode();
+				System.out.println(ruleDetails+" "+drools.getRule().getName()+"  duplicateCodes: " + duplicateCodes);
+			}
+
+			duplicateCodes = duplicateCodes.substring(5);
+			System.out.println(ruleDetails+" "+drools.getRule().getName()+"  Final duplicateCodes: " + duplicateCodes);
+
+			QCmdMessage duplicateEmailMsg = new QCmdMessage("DUPLICATE_EMAILS", duplicateCodes);
+			duplicateEmailMsg.setMessage(number);
+			duplicateEmailMsg.setToken(beUtils.getGennyToken().getToken());
+			duplicateEmailMsg.setSend(true);
+			KafkaUtils.writeMsg("webcmds", duplicateEmailMsg);
+
+
+			if (count == 0) {
+				number = "There are 0 duplicate emails";
+			} else {
+				number = "There are " + count + " duplicate emails";
+			}
+
+			QCmdMessage toastMsg = new QCmdMessage("TOAST", "INFO");
+			toastMsg.setMessage(number);
+			toastMsg.setToken(beUtils.getGennyToken().getToken());
+			toastMsg.setSend(true);
+			KafkaUtils.writeMsg("webcmds", toastMsg);
+		}
+
+
+		String message = "Email Address "+answer.getValue()+" is already taken. Please delete any unwanted copies or merge data with an existing";
+		System.out.println(ruleDetails+" "+drools.getRule().getName()+" "+message);
+		Answer feedbackAnswer = new Answer(answer.getSourceCode(),answer.getTargetCode(),answer.getAttributeCode(),"");
+		QwandaUtils.sendFeedback(beUtils.getGennyToken(), feedbackAnswer, "ERROR", message);
+		System.out.println(ruleDetails+" "+drools.getRule().getName()+" Sent error message back to frontend");
+
+	}
+	
+	retract(answer);
+	update(answersToSave);
+
+end

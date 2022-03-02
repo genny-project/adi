@@ -1,0 +1,61 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+
+rule "PRI_PHONE"
+ruleflow-group 'DataProcessing'
+salience 500
+when
+	beUtils : BaseEntityUtils()
+	serviceToken : GennyToken( code == "PER_SERVICE")
+	answer : Answer( attributeCode == "PRI_MOBILE" || attributeCode == "PRI_LANDLINE" ||  attributeCode == "PRI_PHONE"  || attributeCode == "PRI_FAX" ||  attributeCode == "PRI_PHONE_ADDITIONAL" )
+	answersToSave : Answers()
+	ruleDetails : RuleDetails()
+then
+	System.out.println(ruleDetails+" "+drools.getRule().getName()+" Processing Answer/Data : " + answer );
+	String sourceCode = beUtils.getGennyToken().getUserCode();
+	String targetCode = answer.getTargetCode();
+
+	/* Parse json answer and save the individual answers */
+
+	String phonenumber = answer.getValue();
+	String message = "People require a mobile number! Please replace with a mobile";
+
+	if (phonenumber != null) {
+
+		/* remove all non digits */
+		phonenumber  = phonenumber.replaceAll("[^\\d\\+]", "");
+
+		if (!phonenumber.startsWith("+")) {
+			if (phonenumber.startsWith("0")) {
+				phonenumber = "61"+phonenumber.substring(1); /* remove the 0  and assume Australian*/
+			}
+		}
+		phonenumber = StringUtils.deleteWhitespace(phonenumber);
+		System.out.println(ruleDetails+" "+drools.getRule().getName()+" Raw Phone number is "+answer.getValue()+" , fixed number is "+phonenumber);
+
+		Answer phone = new Answer(answer.getSourceCode(), answer.getTargetCode(), answer.getAttributeCode(), phonenumber);
+		answersToSave.add(phone);
+		if (!answer.getAttributeCode().equals("PRI_PHONE")) {
+			answersToSave.add(new Answer(answer.getSourceCode(), answer.getTargetCode(), "PRI_PHONE", phonenumber, false,true));
+			System.out.println("Saving a Phone Number! Type: PRI_PHONE  with phone number: " + phonenumber);
+		}
+		System.out.println("Saving a Phone Number! Type: " + answer.getAttributeCode() + " with phone number: " + phonenumber);
+
+	} else {
+			message = "Phone number is empty!";
+			System.out.println(message);
+			Answer feedbackAnswer = new Answer(answer.getSourceCode(),answer.getTargetCode(),answer.getAttributeCode(),"");
+			QwandaUtils.sendFeedback(beUtils.getGennyToken(), feedbackAnswer, "ERROR", message);
+			System.out.println("Sent error message back to frontend");
+	}
+
+	retract(answer);
+	update(answersToSave);
+end

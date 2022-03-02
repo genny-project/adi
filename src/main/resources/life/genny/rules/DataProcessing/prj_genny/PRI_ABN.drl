@@ -1,0 +1,76 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+import org.apache.commons.lang3.StringUtils;
+
+rule "PRI_ABN"
+ruleflow-group 'DataProcessing'
+salience 5000 
+when
+	beUtils : BaseEntityUtils()
+	answer : Answer( attributeCode == "PRI_ABN" )
+	answersToSave : Answers()
+	ruleDetails : RuleDetails()
+	userToken : GennyToken( code != "PER_SERVICE")  
+then
+	System.out.println(ruleDetails+" "+drools.getRule().getName()+" user=" + beUtils.getGennyToken().getUserCode()+" : "+answer); 
+	System.out.println(drools.getRule().getName() + " triggered");
+	
+	/* check if abn is valid */
+	String abn = StringUtils.deleteWhitespace(answer.getValue());
+	
+
+	if (QwandaUtils.isValidAbnFormat(abn)) {
+		System.out.println("This abn "+answer.getValue()+" is good");
+		
+		/* if abn is valid, check if the abn exists in the system */
+		SearchEntity searchBE = new SearchEntity("SBE_UNIQUE_ABN", "Unique Abn")
+				.addFilter("PRI_CODE", SearchEntity.StringFilter.LIKE, "CPY_%") 
+				.addFilter("PRI_ABN", SearchEntity.StringFilter.EQUAL, abn) 
+				.addFilter("PRI_STATUS", SearchEntity.StringFilter.EQUAL, "ACTIVE")
+				.addColumn("PRI_NAME", "Name")
+				.setPageStart(0)
+				.setPageSize(100);
+		
+		searchBE.setRealm(beUtils.getServiceToken().getRealm());
+
+		Long abnCount = beUtils.getBaseEntityCount(searchBE);
+		System.out.println("abnCount   ::   " + abnCount);
+
+		if (abnCount > 0) {
+			String message = "A company with this ABN " +  abn + " already has already been registered, go to the Host Companies table to see this account.";
+			Answer feedbackAnswer = new Answer(answer.getSourceCode(),answer.getTargetCode(), answer.getAttributeCode(),"");
+			QwandaUtils.sendFeedback(beUtils.getGennyToken(), feedbackAnswer, "ERROR", message);
+			System.out.println("Sent not unique ABN error message to frontend");	
+
+			BaseEntity companyBe = beUtils.getBaseEntityByCode(answer.getTargetCode());
+			if(companyBe != null){
+				companyBe.removeAttribute("PRI_ABN");
+				companyBe.removeAttribute("LNK_SPECIFY_ABN");	
+
+				Answer nameAns = new Answer(answer.getSourceCode(), answer.getTargetCode(), "PRI_NAME", "");
+				Answer legalNameAns = new Answer(answer.getSourceCode(), answer.getTargetCode(), "PRI_LEGAL_NAME", "");
+				QwandaUtils.sendToFrontEnd(userToken, nameAns, legalNameAns);
+			}
+
+		} else {
+			answer.setValue(abn);
+			answersToSave.add(answer);
+		}
+
+	} else {
+		String message = "ABN "+answer.getValue()+" is an invalid ABN format";
+		System.out.println(message);
+		Answer feedbackAnswer = new Answer(answer.getSourceCode(), answer.getTargetCode(), answer.getAttributeCode(), "");
+		QwandaUtils.sendFeedback(beUtils.getGennyToken(), feedbackAnswer, "ERROR", message);
+		System.out.println("Sent error message back to frontend");		
+	}
+	retract(answer);
+	
+end

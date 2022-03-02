@@ -1,0 +1,118 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+import life.genny.qwandaq.message.QDataAskMessage;
+
+rule "AUTOFILL_NAME"
+ruleflow-group 'DataProcessing'
+salience 5000
+when
+	beUtils : BaseEntityUtils()
+	answer : Answer ((attributeCode == "PRI_NAME" || attributeCode == "PRI_LEGAL_NAME") 
+			&& targetCode matches "CPY_.*" 
+			&& inferred == true)
+	serviceToken : GennyToken( code == "PER_SERVICE")
+	userToken : GennyToken( code != "PER_SERVICE")
+then
+	System.out.println(drools.getRule().getName() + " triggered");
+	System.out.println("answer  ::  " + answer); 
+
+	Boolean inferred = answer.getInferred();
+	System.out.println("inferred   ::   " + inferred);
+	answer.setInferred(!inferred);
+	System.out.println("inferred   ::   " + inferred);
+	
+	Boolean cannotSaveName = false;
+
+	String targetCode = answer.getTargetCode();
+	System.out.println("targetCode   ::   " + targetCode); 
+
+	String attributeCode = answer.getAttributeCode();
+	System.out.println("attributeCode   ::   " + attributeCode);
+
+	if(targetCode == null){
+		System.out.println("Answer message doesnt have targetCode");
+		return;
+	}
+
+	BaseEntity companyBe = beUtils.getBaseEntityByCode(targetCode);
+	if(companyBe == null){
+		System.out.println("companyBe is null");
+		return;
+	}
+
+	Optional<String> optAbn = companyBe.getValue("PRI_ABN");
+	if (optAbn.isPresent()){
+		String abn = optAbn.get().trim();
+		if(!abn.isEmpty()){
+
+			if (QwandaUtils.isValidAbnFormat(abn)) {
+				System.out.println("ABN is valid");
+
+				/* if abn is valid, check if the abn exists in the system */
+				SearchEntity searchBE = new SearchEntity("SBE_UNIQUE_ABN", "Unique Abn")
+						.addFilter("PRI_CODE", SearchEntity.StringFilter.LIKE, "CPY_%") 
+						.addFilter("PRI_ABN", SearchEntity.StringFilter.EQUAL, abn) 
+						.addFilter("PRI_STATUS", SearchEntity.StringFilter.EQUAL, "ACTIVE") 
+						.addColumn("PRI_NAME", "Name")
+						.setPageStart(0)
+						.setPageSize(100);
+				
+				searchBE.setRealm(beUtils.getServiceToken().getRealm());
+
+				Long abnCount = beUtils.getBaseEntityCount(searchBE);
+				System.out.println("abnCount   ::   " + abnCount);
+
+				if(abnCount > 1){
+					System.out.println("ABN is NOT UNIQUE. Not saving PRI_NAME and PRI_LEGAL_NAME");
+					cannotSaveName = false;
+				}
+			}
+		}
+	}else{
+		cannotSaveName = true;
+	}
+	if(!cannotSaveName){
+		
+		Ask newAsk=null;
+		String questionCode="";
+		if(attributeCode.equals("PRI_NAME")) questionCode="QUE_TRADING_NAME";
+		if(attributeCode.equals("PRI_LEGAL_NAME")) questionCode="QUE_LEGAL_NAME";
+
+		QDataAskMessage askMsg = QuestionUtils.getAsks(userToken.getUserCode(), targetCode, "QUE_HOST_CPY_GRP", userToken.getToken());
+		if (askMsg != null) {
+			/* Find the ask */
+			for (Ask ask : askMsg.getItems().get(0).getChildAsks()) {
+				if (ask.getQuestionCode().equals(questionCode)) {
+					newAsk = ask;
+					break;
+				}	
+			}
+		} else {
+			System.out.println("Could not fetch ask from cache: QUE_HOST_CPY_GRP"); 
+		}
+
+		if(newAsk != null && !questionCode.isEmpty()){
+			
+			/* Disable the ask */
+			System.out.println("Disabling the questionCode :: "+ newAsk.getQuestionCode());
+			TaskUtils.enableTaskQuestion(newAsk, false, userToken);
+
+			/* save the answer */
+			Answer nameAnswer = new Answer(answer.getSourceCode(), answer.getTargetCode(), answer.getAttributeCode(), answer.getValue());
+			beUtils.saveAnswer(nameAnswer);
+			QwandaUtils.sendToFrontEnd(userToken, nameAnswer);
+			
+			/* Enable the ask */
+			System.out.println("Enabling the questionCode :: "+ newAsk.getQuestionCode());
+			TaskUtils.enableTaskQuestion(newAsk, true, userToken);
+		}
+	}
+	retract(answer);
+end

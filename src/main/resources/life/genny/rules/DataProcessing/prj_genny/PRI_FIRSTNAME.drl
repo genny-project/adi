@@ -1,0 +1,78 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.utils.QwandaUtils;
+import life.genny.qwandaq.utils.KeycloakUtils;
+import org.apache.commons.lang3.text.WordUtils;
+
+rule "PRI_FIRSTNAME"
+ruleflow-group 'DataProcessing'
+salience 10000 
+no-loop
+when
+	beUtils : BaseEntityUtils()
+	answer : Answer( attributeCode == "PRI_FIRSTNAME" )
+	answersToSave : Answers()
+	serviceToken : GennyToken( code == "PER_SERVICE")
+	userToken : GennyToken( code != "PER_SERVICE")
+	allowed: Allowed((code == "USER") || (code == "EDIT_INTERN") || (code == "EDIT_HCR") || (code == "EDIT_EPR") || (code == "EDIT_REF_PART_REP") || (code == "EDIT_AGENT"))
+then
+	System.out.println("Rule -> "+drools.getRule().getName()+" :  user=" + beUtils.getGennyToken().getUserCode()+" : "+answer); 
+	String sourceCode = beUtils.getGennyToken().getUserCode();
+	String targetCode = answer.getTargetCode();
+	BaseEntity person = beUtils.getBaseEntityByCode(targetCode);
+	
+	/* Parse json answer and save the individual answers */
+	String firstname = answer.getValue();
+	firstname = firstname.toLowerCase().trim();
+	firstname = WordUtils.capitalize(firstname);
+
+	String fieldName = "firstName";
+	boolean allowedToChange = false;
+	System.out.println("Rule -> PRI_LASTNAME, the allowed.code is "+allowed.code);
+	/* check if capability to change last name there */
+	switch (allowed.code) {
+		case "USER":        {allowedToChange = true;} break;
+		case "EDIT_INTERN": {allowedToChange = true;} break;
+		case "EDIT_AGENT":  {allowedToChange = true;} break;
+		case "EDIT_HCR":    {allowedToChange = true;} break;
+		case "EDIT_EPR":    {allowedToChange = true;} break;
+		case "EDIT_REF_PART_REP": {allowedToChange = true;} break;
+	}
+
+	if (allowedToChange && !firstname.isEmpty()) {
+
+		int statusCode = KeycloakUtils.updateUserField(userToken, person, fieldName, firstname);
+		System.out.println(drools.getRule().getName()+" Changing "+fieldName+" for "+answer.getTargetCode()+" to "+answer.getValue()+" statusCode="+statusCode);
+		if (statusCode > 204) {
+			System.out.println(drools.getRule().getName()+" Error in setting"+fieldName+" for "+answer.getTargetCode()+" to "+answer.getValue()+" statusCode="+statusCode);
+		} else {
+			System.out.println(drools.getRule().getName()+"  Saving the good "+fieldName);
+		}
+	}
+
+	answersToSave.add(new Answer(sourceCode, targetCode, "PRI_FIRSTNAME", firstname,false,false));	
+
+	String lastname = person.getValue("PRI_LASTNAME","");
+	String name = firstname  + " " + lastname;
+	name = name.trim();	
+	System.out.println("Rule -> PRI_FIRSTNAME Name = " + name);
+		
+	String initials = WordUtils.initials(name).toUpperCase();
+	System.out.println("Rule -> PRI_FIRSTNAME initials = " + initials);
+
+	Answer answerName = new Answer(sourceCode,targetCode,"PRI_NAME",name,false,true);
+	answersToSave.add(answerName);
+	Answer answerInitials = new Answer(sourceCode,targetCode,"PRI_INITIALS",initials,false,true);
+	answersToSave.add(answerInitials);
+	
+	QwandaUtils.sendToFrontEnd(userToken, answerName);
+
+	retract(answer); 
+	update(answersToSave);
+end 

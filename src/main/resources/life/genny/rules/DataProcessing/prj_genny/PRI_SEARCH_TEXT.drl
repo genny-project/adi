@@ -1,0 +1,36 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+
+rule "PRI_SEARCH_TEXT"
+ruleflow-group 'DataProcessing'
+salience 450
+no-loop true
+when
+	beUtils : BaseEntityUtils()
+	serviceToken : GennyToken( code == "PER_SERVICE")
+	answer : Answer( attributeCode == "PRI_SEARCH_TEXT" && (!value.contains(":")) )
+then
+	System.out.println("Rule -> "+drools.getRule().getName()+" :  user=" + beUtils.getGennyToken().getUserCode()+" : "+answer);
+
+	/* send the table display message out  */
+	QCmdMessage msg = new QCmdMessage("DISPLAY", "TABLE");
+	msg.setToken(beUtils.getGennyToken().getToken());
+	msg.setSend(true);  	
+	KafkaUtils.writeMsg("webcmds", msg);
+
+	SearchEntity searchBE = SearchUtils.getSessionSearch("SBE_SEARCHBAR");
+	searchBE.setWildcard(answer.getValue());
+
+	CacheUtils.putObject(beUtils.getGennyToken().getRealm(), searchBE.getCode(), searchBE);
+
+	SearchUtils.searchTable(beUtils, searchBE);
+
+	retract(answer);
+end

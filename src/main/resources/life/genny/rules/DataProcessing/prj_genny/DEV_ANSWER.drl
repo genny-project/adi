@@ -1,0 +1,28 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+
+rule "DEV_ANSWER"
+ruleflow-group 'DataProcessing'
+salience 10000 
+no-loop
+when
+	beUtils : BaseEntityUtils()
+	serviceToken : GennyToken( code == "PER_SERVICE") 
+	userToken : GennyToken( code != "PER_SERVICE")
+	answer : Answer( attributeCode matches "QUE_DEV_EDIT_.*" )
+then
+	System.out.println("Rule -> "+drools.getRule().getName()+" :  user=" + beUtils.getGennyToken().getUserCode()+" : "+answer); 
+
+	List<Answer> answers = new ArrayList<>();
+	answers.add(answer);	
+	beUtils.saveAnswers(answers);
+
+	retract(answer); 
+end

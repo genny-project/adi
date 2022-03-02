@@ -1,0 +1,80 @@
+package life.genny.rules;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+
+rule "SET_PER_FIELDS_FOR_CARDS"
+ruleflow-group 'DataProcessing'
+no-loop true
+salience 1 
+when
+	userToken : GennyToken (code != "PER_SERVICE" )
+	serviceToken : GennyToken (code == "PER_SERVICE" )
+	newBe : BaseEntity( code matches "PER_\\S+" )
+	baseEntityType : String(baseEntityType.equals("Intern"))
+then
+	System.out.println("SET_PER_FIELDS_FOR_CARDS: Rule fired" ); 
+	System.out.println("SET_PRI_STATUS_AS_APPLIED: newBe = " + newBe); 
+
+	BaseEntityUtils beUtils = new BaseEntityUtils(userToken);
+
+	String lnk_industry = newBe.getValue("LNK_INDUSTRY", null);
+	lnk_industry = lnk_industry.replace("\"", "").replace("[", "").replace("]", "");
+	BaseEntity industry_Be = beUtils.getBaseEntityByCode(lnk_industry);
+	String industry = industry_Be.getValue("PRI_NAME", null);
+
+	String lnk_occupation = newBe.getValue("LNK_OCCUPATION", null);
+	lnk_occupation = lnk_occupation.replace("\"", "").replace("[", "").replace("]", "");
+	BaseEntity occupation_Be = beUtils.getBaseEntityByCode(lnk_occupation);
+	String occupation = occupation_Be.getValue("PRI_NAME", null);
+
+	String lnk_star_rating = newBe.getValue("LNK_STAR_RATING_TEST", null);
+	lnk_star_rating = lnk_star_rating.replace("\"", "").replace("[", "").replace("]", "");
+	BaseEntity star_rating_Be = beUtils.getBaseEntityByCode(lnk_star_rating);
+	String star_rating = star_rating_Be.getValue("PRI_NAME", null);
+
+	String lnk_compass = newBe.getValue("LNK_COMPASS_TEST", null);
+	lnk_compass = lnk_compass.replace("\"", "").replace("[", "").replace("]", "");
+	BaseEntity compass_Be = beUtils.getBaseEntityByCode(lnk_compass);
+	String compass = compass_Be.getValue("PRI_NAME", null);
+
+	String suburb = newBe.getValue("PRI_ADDRESS_SUBURB", null);
+	String state = newBe.getValue("PRI_ADDRESS_STATE", null);
+
+	compass = compass + ", " + suburb + ", " + state;
+
+	String lnk_transport = newBe.getValue("LNK_TRANSPORT_TEST", null);
+	lnk_transport = lnk_transport.replace("\"", "").replace("[", "").replace("]", "");
+	BaseEntity transport_Be = beUtils.getBaseEntityByCode(lnk_transport);
+	String transport = transport_Be.getValue("PRI_NAME", null);
+
+	System.out.println("##################################### DUDE: industry = " +industry);
+	System.out.println("##################################### DUDE: occupation = " +occupation);
+	System.out.println("##################################### DUDE: star_rating = " +star_rating);
+	System.out.println("##################################### DUDE: compass = " +compass);
+	System.out.println("##################################### DUDE: transport = " +transport); 		
+
+	List<Answer> answers = new ArrayList<Answer>();
+
+	answers.add(new Answer(userToken.getUserCode(), newBe.getCode(),"PRI_INDUSTRY", industry));
+	answers.add(new Answer(userToken.getUserCode(), newBe.getCode(),"PRI_OCCUPATION", occupation));
+	answers.add(new Answer(userToken.getUserCode(), newBe.getCode(),"PRI_STAR_RATING", star_rating));
+	answers.add(new Answer(userToken.getUserCode(), newBe.getCode(),"PRI_COMPASS", compass));
+	answers.add(new Answer(userToken.getUserCode(), newBe.getCode(),"PRI_TRANSPORT", transport));
+
+	beUtils.saveAnswers(answers);
+
+	System.out.println("##################################### DUDE: ANSWER = " +answers);
+	System.out.println("##################################### DUDE: NEW_APPLICATION = " + newBe);
+
+	retract(newBe)
+	retract(baseEntityType)
+end

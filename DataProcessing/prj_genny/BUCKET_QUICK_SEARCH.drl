@@ -1,0 +1,29 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+
+rule "BUCKET_QUICK_SEARCH"
+ruleflow-group 'DataProcessing'
+salience 500
+no-loop true
+when
+	userToken : GennyToken (code != "PER_SERVICE" )
+	serviceToken : GennyToken (code == "PER_SERVICE" )
+	answer : Answer( attributeCode == "LNK_PERSON" && value != "[]" )
+	beUtils : BaseEntityUtils()
+then
+	System.out.println(drools.getRule().getName()+": Rule fired");
+
+	/* Ensure frontend has updated dropdown value */
+	QwandaUtils.sendToFrontEnd(userToken, answer);
+
+	SearchUtils.performQuickSearch(beUtils, answer.getValue());
+	
+	retract(answer);
+end

@@ -1,0 +1,45 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.utils.CacheUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.attribute.EntityAttribute;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+
+rule "PRI_SEARCH_SORT"
+ruleflow-group 'DataProcessing'
+salience 450
+no-loop true
+when
+	beUtils : BaseEntityUtils()
+	serviceToken : GennyToken( code == "PER_SERVICE")
+	answer : Answer( attributeCode  matches "SRT_.*"  && targetCode matches "SBE_.*" )
+then
+	System.out.println("Rule -> "+drools.getRule().getName()+" :  user=" + beUtils.getGennyToken().getUserCode()+" : "+answer);
+
+	String targetCode = answer.getTargetCode();
+
+	SearchEntity searchBE = CacheUtils.getObject(beUtils.getGennyToken().getRealm(), targetCode, SearchEntity.class);
+	
+	/* Update the sorts */
+	List<EntityAttribute> sortEAs = searchBE.findPrefixEntityAttributes("SRT_");
+	if (!sortEAs.isEmpty()) {
+		for (EntityAttribute sortEA : sortEAs) {
+			Double weight = sortEA.getWeight();
+			sortEA.setWeight(weight + 1.0);
+			if (sortEA.getAttributeCode().equals(answer.getAttributeCode())) {
+				sortEA.setWeight(0.0);
+				sortEA.setValue(answer.getValue());
+			}
+		}
+	}
+	CacheUtils.putObject(beUtils.getGennyToken().getRealm(), searchBE.getCode(), searchBE);
+
+	SearchUtils.searchTable(beUtils, searchBE);
+
+	retract(answer);
+end

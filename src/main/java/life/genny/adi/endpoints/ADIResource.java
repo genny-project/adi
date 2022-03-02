@@ -11,12 +11,19 @@ import javax.ws.rs.core.Response;
 import javax.persistence.EntityManager;
 
 import org.jboss.logging.Logger;
+import org.kie.api.KieBase;
+import org.kie.api.KieServices;
+import org.kie.api.runtime.Environment;
+import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.KieSessionConfiguration;
 import org.kie.kogito.legacy.rules.KieRuntimeBuilder;
 import org.drools.core.common.InternalAgenda;
+import org.drools.core.impl.EnvironmentFactory;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import io.vertx.core.http.HttpServerRequest;
+import life.genny.adi.live.data.InternalConsumer;
 
 /**
  * ADIResource - Endpoints providing ADI 
@@ -40,6 +47,8 @@ public class ADIResource {
     @Inject
     KieRuntimeBuilder ruleRuntime;
 
+	// KieContainer kieContainer = KieServices.Factory.get().newKieClasspathContainer();
+
 	Jsonb jsonb = JsonbBuilder.create();
 
 	/**
@@ -58,16 +67,21 @@ public class ADIResource {
 	public Response run() {
 
         // init session and activate DataProcessing
-        KieSession ksession = ruleRuntime.newKieSession();
-        ((InternalAgenda) ksession.getAgenda()).activateRuleFlowGroup("DataProcessing");
+        // KieSession ksession = ruleRuntime.newKieSession();
+		KieBase kieBase = ruleRuntime.getKieBase();
+		KieSessionConfiguration conf = KieServices.Factory.get().newKieSessionConfiguration();
+		Environment environment = EnvironmentFactory.newEnvironment();
+		KieSession kieSession = kieBase.newKieSession(conf, environment);
+        // KieSession ksession = kieContainer.newKieSession();
+        ((InternalAgenda) kieSession.getAgenda()).activateRuleFlowGroup("DataProcessing");
 
         // insert facts into session
-        ksession.insert("WORLD");
-        ksession.insert(log);
+        kieSession.insert("WORLD");
+        kieSession.insert(log);
 
         // fire rules and dispose of session
-        ksession.fireAllRules();
-        ksession.dispose();
+        kieSession.fireAllRules();
+        kieSession.dispose();
 
 		return Response.ok().build();
 	}

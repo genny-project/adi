@@ -7,15 +7,18 @@ import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
+import java.io.StringReader;
 import java.time.Duration;
 import java.time.Instant;
 
 import org.drools.core.common.InternalAgenda;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.jboss.logging.Logger;
+import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
+import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.kogito.legacy.rules.KieRuntimeBuilder;
 
@@ -34,11 +37,15 @@ public class InternalConsumer {
 
     static Jsonb jsonb = JsonbBuilder.create();
 
-    @Inject
-    KieRuntimeBuilder ruleRuntime;
+    // @Inject
+    // KieRuntimeBuilder ruleRuntime;
+	//
+	KieContainer kieContainer = KieServices.Factory.get().newKieClasspathContainer();
 
 	@Inject
 	Service service;
+
+	KieSession ksession;
 
 	/**
 	* Execute on start up.
@@ -101,7 +108,8 @@ public class InternalConsumer {
 		Answers answersToSave = new Answers();
 
         // init session and activate DataProcessing
-        KieSession ksession = ruleRuntime.newKieSession();
+        // KieSession ksession = ruleRuntime.newKieSession();
+        KieSession ksession = kieContainer.newKieSession();
         ((InternalAgenda) ksession.getAgenda()).activateRuleFlowGroup("DataProcessing");
 
         // insert facts into session
@@ -132,6 +140,11 @@ public class InternalConsumer {
 		KieServices kieServices = KieServices.Factory.get();
 		KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
 		KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
+
+		String contents = "...";
+		kieFileSystem.write("src/main/resources/simple.drl", kieServices.getResources().newReaderResource(new StringReader(contents)));
+
 		kieBuilder.buildAll();
+
 	}
 }

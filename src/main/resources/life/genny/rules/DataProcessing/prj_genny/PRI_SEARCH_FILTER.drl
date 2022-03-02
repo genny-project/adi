@@ -1,0 +1,212 @@
+package life.genny.rules;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.utils.SearchUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.attribute.Attribute;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+import life.genny.qwandaq.rules.RuleDetails;
+
+rule "PRI_SEARCH_FILTER"
+ruleflow-group 'DataProcessing'
+salience 550 
+when
+	beUtils : BaseEntityUtils()
+	serviceToken : GennyToken( code == "PER_SERVICE") 
+	answer : Answer(( 
+					attributeCode matches "FLD_.*" ||
+					attributeCode matches "FLC_.*" ||
+					attributeCode == "PRI_ASSOC_INDUSTRY" ||
+					attributeCode == "PRI_ADDRESS_STATE" 
+				) && 
+				targetCode matches "SBE_.*"  && 
+				!(value.startsWith("!"))
+				)
+	answersToSave : Answers()
+then
+	System.out.println("Rule -> "+drools.getRule().getName()+" :  user=" + beUtils.getGennyToken().getUserCode()+" : "+answer); 
+	String sourceCode = beUtils.getGennyToken().getUserCode();
+
+	if (sourceCode.equals(answer.getSourceCode())) { /* only user */
+		System.out.println(drools.getRule().getName()+" Source user is confirmed "+sourceCode);
+		String targetCode = answer.getTargetCode();
+	
+		System.out.println("sourceCode = " + sourceCode);
+		System.out.println("targetCode = " + targetCode);
+
+		/* Retrieve the target SBE */
+		SearchEntity searchBE = CacheUtils.getObject(beUtils.getGennyToken().getRealm(), targetCode, SearchEntity.class);
+		searchBE.setFilterIndex(searchBE.getMaximumFilterWeight() + 1.0);
+
+		String val = answer.getValue();
+		String filterAttributeCode = answer.getAttributeCode();
+		if (filterAttributeCode.startsWith("FLD_") || filterAttributeCode.startsWith("FLC_")) {
+			filterAttributeCode = filterAttributeCode.substring(4);
+		}
+		
+		System.out.println("filterAttributeCode = " + filterAttributeCode);
+		System.out.println("val = " + val);
+
+		if (StringUtils.isBlank(answer.getValue())) {
+			System.out.println("Error, Value is blank");
+
+		} else {
+
+			String valString = null;
+			Integer valInt = null;
+			Long valLong = null;
+			Double valDouble = null;
+			Boolean valBoolean = null;
+			LocalDate valDate = null;
+			LocalDateTime valDateTime = null;
+
+			String filterString = null;
+			SearchEntity.Filter filtType = null;
+			SearchEntity.StringFilter stringFiltType = null;
+
+			Attribute attr = QwandaUtils.getAttribute(filterAttributeCode);
+			String dtt = attr.getDataType().getClassName();
+			System.out.println("Attribute datatype = " + dtt);
+
+			if (val.contains(":")) {
+				String[] prms = val.split(":");
+				filterString = prms[0];
+				val = String.join(":", Arrays.copyOfRange(prms, 1, prms.length));
+			} else {
+				filterString = "=";
+			}
+			System.out.println("val = " + val);
+
+			/* Determine the datatype */
+			if (dtt.equals("java.lang.Boolean") || dtt.equals("Boolean")) {
+				valBoolean = Boolean.valueOf(val);
+				System.out.println("valBoolean = " + valBoolean);
+			} else if (dtt.equals("java.lang.Double") || dtt.equals("Double")) {
+				valDouble = Double.valueOf(val);
+				System.out.println("valDouble = " + valDouble);
+			} else if (dtt.equals("java.lang.Integer") || dtt.equals("Integer")) {
+				valInt = Integer.valueOf(val);
+				System.out.println("valInt = " + valInt);
+			} else if (dtt.equals("java.lang.Long") || dtt.equals("Long")) {
+				valLong = Long.valueOf(val);
+				System.out.println("valLong = " + valLong);
+			} else if (dtt.equals("java.time.LocalDateTime") || dtt.equals("LocalDateTime")) {
+				String dateTimeString = val.split("\\.")[0];
+				valDateTime = LocalDateTime.parse(dateTimeString);
+				System.out.println("valDateTime = " + valDateTime);
+			} else if (dtt.equals("java.time.LocalDate") || dtt.equals("LocalDate")) {
+				String dateTimeString = val.split("\\.")[0];
+				LocalDateTime dateTime = LocalDateTime.parse(dateTimeString);
+				valDate = dateTime.toLocalDate();
+				System.out.println("valDate = " + valDate);
+			} else {
+				/* DEFAULTS TO STRING */
+				valString = val;
+				System.out.println("valString = " + valString);
+			}
+
+			System.out.println("filterString = " + filterString);
+
+			/* Determine the filter type */
+			if (filterString.equals("L")) {
+				stringFiltType = SearchEntity.StringFilter.LIKE;
+				valString = "%" + valString + "%";
+			} else if (filterString.equals("NL")) {
+				stringFiltType = SearchEntity.StringFilter.NOT_LIKE;
+				valString = "%" + valString + "%";
+			} else if (filterString.equals(">")) {
+				filtType = SearchEntity.Filter.GREATER_THAN;
+			} else if (filterString.equals("<")) {
+				filtType = SearchEntity.Filter.LESS_THAN;
+			} else if (filterString.equals(">=")) {
+				filtType = SearchEntity.Filter.GREATER_THAN_AND_EQUAL;
+			} else if (filterString.equals("<=")) {
+				filtType = SearchEntity.Filter.LESS_THAN_AND_EQUAL;
+			} else if (filterString.equals("=")) {
+				if (valString != null) {
+					stringFiltType = SearchEntity.StringFilter.EQUAL;
+				} else {
+					filtType = SearchEntity.Filter.EQUALS;
+				}
+			} else if (filterString.equals("!=")) {
+				if (valString != null) {
+					stringFiltType = SearchEntity.StringFilter.NOT_EQUAL;
+				} else {
+					filtType = SearchEntity.Filter.NOT_EQUALS;
+				}
+			}
+
+			System.out.println("valString = " + valString);
+			
+			Boolean andTrigger = false;
+			for (EntityAttribute ea : searchBE.getBaseEntityAttributes()) {
+				if (ea.getAttributeCode().equals(filterAttributeCode)) {
+					andTrigger = true;
+				}
+			}
+			
+			System.out.println("andTrigger = " + andTrigger);
+
+			/* Add filter */
+			if (!andTrigger) {
+				if (valString != null) {
+					searchBE.addFilter(filterAttributeCode, stringFiltType, valString);
+				} else if (valInt != null) {
+					searchBE.addFilter(filterAttributeCode, filtType, valInt);
+				} else if (valLong != null) {
+					searchBE.addFilter(filterAttributeCode, filtType, valLong);
+				} else if (valDouble != null) {
+					searchBE.addFilter(filterAttributeCode, filtType, valDouble);
+				} else if (valDate != null) {
+					searchBE.addFilter(filterAttributeCode, filtType, valDate);
+				} else if (valDateTime != null) {
+					searchBE.addFilter(filterAttributeCode, filtType, valDateTime);
+				} else if (valBoolean != null) {
+					searchBE.addFilter(filterAttributeCode, valBoolean);
+				}
+			} else {
+				/* Add AND filter if attribute already exists */
+				if (valString != null) {
+					searchBE.addAnd(filterAttributeCode, stringFiltType, valString);
+				} else if (valInt != null) {
+					searchBE.addAnd(filterAttributeCode, filtType, valInt);
+				} else if (valLong != null) {
+					searchBE.addAnd(filterAttributeCode, filtType, valLong);
+				} else if (valDouble != null) {
+					searchBE.addAnd(filterAttributeCode, filtType, valDouble);
+				} else if (valDate != null) {
+					searchBE.addAnd(filterAttributeCode, filtType, valDate);
+				} else if (valDateTime != null) {
+					searchBE.addAnd(filterAttributeCode, filtType, valDateTime);
+				} else if (valBoolean != null) {
+					System.out.println("WARN: Cannot add a second boolean filter on this attribute " + filterAttributeCode);
+				}
+			}
+		}
+
+		CacheUtils.putObject(beUtils.getGennyToken().getRealm(), searchBE.getCode(), searchBE);
+		System.out.println("Performing search...");
+
+		SearchUtils.searchTable(beUtils, searchBE);
+
+		/* Send out the Filter question group */
+		SearchUtils.sendFilterQuestions(beUtils, searchBE);
+	
+	} else {
+		System.out.println(drools.getRule().getName()+" sourceCode ("+sourceCode+") not equal to answer.source ("+answer.getSourceCode()+")");
+	}
+		
+	
+	
+
+	retract(answer);
+	update(answersToSave);
+
+end

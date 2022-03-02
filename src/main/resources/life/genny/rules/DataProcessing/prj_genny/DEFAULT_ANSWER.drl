@@ -1,0 +1,25 @@
+package life.genny.rules;
+
+import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Answer;
+import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.models.GennyToken;
+import life.genny.qwandaq.datatype.Allowed;
+
+rule "DEFAULT_ANSWER"
+ruleflow-group 'DataProcessing'
+salience -10000 
+no-loop true
+when
+  answer : Answer()
+  answersToSave : Answers()
+ then
+	System.out.println("Rule -> DEFAULT_ANSWER : "+answer); 
+
+	answer.setChangeEvent(false);
+	answersToSave.add(answer);
+	
+	/* retract(answer); */
+	update(answersToSave);
+end
