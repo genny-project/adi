@@ -1,7 +1,9 @@
 package life.genny.rules;
 
 import life.genny.qwandaq.utils.BaseEntityUtils;
+import life.genny.qwandaq.utils.QuestionUtils;
 import life.genny.qwandaq.entity.BaseEntity;
+import life.genny.qwandaq.Ask;
 import life.genny.qwandaq.Answer;
 import life.genny.qwandaq.Answers;
 import life.genny.qwandaq.models.GennyToken;
@@ -85,10 +87,13 @@ then
 		if(attributeCode.equals("PRI_NAME")) questionCode="QUE_TRADING_NAME";
 		if(attributeCode.equals("PRI_LEGAL_NAME")) questionCode="QUE_LEGAL_NAME";
 
-		QDataAskMessage askMsg = QuestionUtils.getAsks(userToken.getUserCode(), targetCode, "QUE_HOST_CPY_GRP", userToken.getToken());
+		QDataAskMessage askMsg = QuestionUtils.getAsks(userToken.getUserCode(), targetCode, "QUE_HOST_CPY_GRP", beUtils);
 		if (askMsg != null) {
+
+			Ask[] items = askMsg.getItems();
+			Ask firstItem = items[0];
 			/* Find the ask */
-			for (Ask ask : askMsg.getItems().get(0).getChildAsks()) {
+			for (Ask ask : firstItem.getChildAsks()) {
 				if (ask.getQuestionCode().equals(questionCode)) {
 					newAsk = ask;
 					break;
@@ -102,7 +107,7 @@ then
 			
 			/* Disable the ask */
 			System.out.println("Disabling the questionCode :: "+ newAsk.getQuestionCode());
-			TaskUtils.enableTaskQuestion(newAsk, false, userToken);
+			QwandaUtils.updateAskDisabled(newAsk, true, userToken);
 
 			/* save the answer */
 			Answer nameAnswer = new Answer(answer.getSourceCode(), answer.getTargetCode(), answer.getAttributeCode(), answer.getValue());
@@ -111,7 +116,7 @@ then
 			
 			/* Enable the ask */
 			System.out.println("Enabling the questionCode :: "+ newAsk.getQuestionCode());
-			TaskUtils.enableTaskQuestion(newAsk, true, userToken);
+			QwandaUtils.updateAskDisabled(newAsk, false, userToken);
 		}
 	}
 	retract(answer);

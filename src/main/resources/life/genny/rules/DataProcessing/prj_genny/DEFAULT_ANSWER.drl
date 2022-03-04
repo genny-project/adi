@@ -20,6 +20,6 @@ when
 	answer.setChangeEvent(false);
 	answersToSave.add(answer);
 	
-	/* retract(answer); */
+	retract(answer);
 	update(answersToSave);
 end

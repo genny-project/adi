@@ -75,6 +75,6 @@ then
 	System.out.println("##################################### DUDE: ANSWER = " +answers);
 	System.out.println("##################################### DUDE: NEW_APPLICATION = " + newBe);
 
-	retract(newBe)
-	retract(baseEntityType)
+	retract(newBe);
+	retract(baseEntityType);
 end
