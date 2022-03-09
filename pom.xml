@@ -49,6 +49,11 @@
       <artifactId>kogito-legacy-api</artifactId>
 	  <version>1.17.0.Final</version>
     </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-addons-quarkus-messaging</artifactId>
+	  <version>1.17.0.Final</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

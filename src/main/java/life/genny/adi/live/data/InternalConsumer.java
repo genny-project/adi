@@ -26,6 +26,7 @@ import io.quarkus.runtime.StartupEvent;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 import life.genny.qwandaq.Answer;
 import life.genny.qwandaq.Answers;
+import life.genny.qwandaq.message.QDataAnswerMessage;
 import life.genny.qwandaq.models.GennyToken;
 import life.genny.qwandaq.utils.BaseEntityUtils;
 import life.genny.serviceq.Service;
@@ -37,10 +38,8 @@ public class InternalConsumer {
 
     static Jsonb jsonb = JsonbBuilder.create();
 
-    // @Inject
-    // KieRuntimeBuilder ruleRuntime;
-	//
-	KieContainer kieContainer = KieServices.Factory.get().newKieClasspathContainer();
+    @Inject
+    KieRuntimeBuilder ruleRuntime;
 
 	@Inject
 	Service service;
@@ -55,7 +54,6 @@ public class InternalConsumer {
     void onStart(@Observes StartupEvent ev) {
 
 		service.fullServiceInit();
-		// loadRules();
 		log.info("[*] Finished Startup!");
     }
 
@@ -75,20 +73,11 @@ public class InternalConsumer {
 		GennyToken serviceToken = beUtils.getServiceToken();
 		GennyToken userToken = null;
 
-        // deserialise to JsonObject
-        JsonObject json = jsonb.fromJson(data, JsonObject.class);
-
-        // check type of msg
-        String msgType = json.getString("msg_type");
-        String msgDataType = json.getString("data_type");
-
-        if (!"DATA_MSG".equals(msgType) || (!"Answer".equals(msgDataType))) {
-            log.error("Invalid message received!");
-            return;
-        }
+        // deserialise to msg
+        QDataAnswerMessage msg = jsonb.fromJson(data, QDataAnswerMessage.class);
 
         // check the token
-        String token = json.getString("token");
+        String token = msg.getToken();
         try {
             userToken = new GennyToken(token);
         } catch (Exception e) {
@@ -99,17 +88,11 @@ public class InternalConsumer {
         // update the token of our utility
         beUtils.setGennyToken(userToken);
 
-		String sourceCode = json.getString("sourceCode");
-		String targetCode = json.getString("targetCode");
-		String attributeCode = json.getString("attributeCode");
-		String value = json.getString("value");
-
-		Answer answer = new Answer(sourceCode, targetCode, attributeCode, value);
+		Answer answer = msg.getItems()[0];
 		Answers answersToSave = new Answers();
 
         // init session and activate DataProcessing
-        // KieSession ksession = ruleRuntime.newKieSession();
-        KieSession ksession = kieContainer.newKieSession();
+        KieSession ksession = ruleRuntime.newKieSession();
         ((InternalAgenda) ksession.getAgenda()).activateRuleFlowGroup("DataProcessing");
 
         // insert facts into session
@@ -130,21 +113,4 @@ public class InternalConsumer {
         log.info("Duration = " + Duration.between(start, end).toMillis() + "ms");
     }
 
-	/**
-	* Load rules into kie.
-	*
-	* NOTE: Still a work in progress.
-	 */
-	public static void loadRules() {
-
-		KieServices kieServices = KieServices.Factory.get();
-		KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
-		KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
-
-		String contents = "...";
-		kieFileSystem.write("src/main/resources/simple.drl", kieServices.getResources().newReaderResource(new StringReader(contents)));
-
-		kieBuilder.buildAll();
-
-	}
 }
