@@ -25,7 +25,8 @@ then
 	msg.setSend(true);  	
 	KafkaUtils.writeMsg("webcmds", msg);
 
-	SearchEntity searchBE = SearchUtils.getSessionSearch("SBE_SEARCHBAR");
+	SearchEntity searchBE = CacheUtils.getObject(beUtils.getRealm(), "SBE_SEARCHBAR", SearchEntity.class);
+	searchBE = SearchUtils.getSessionSearch(beUtils, searchBE);
 	searchBE.setWildcard(answer.getValue());
 
 	CacheUtils.putObject(beUtils.getGennyToken().getRealm(), searchBE.getCode(), searchBE);
