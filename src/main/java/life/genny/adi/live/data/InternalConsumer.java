@@ -34,34 +34,34 @@ import life.genny.serviceq.Service;
 @ApplicationScoped
 public class InternalConsumer {
 
-	static final Logger log = Logger.getLogger(InternalConsumer.class);
+    static final Logger log = Logger.getLogger(InternalConsumer.class);
 
     static Jsonb jsonb = JsonbBuilder.create();
 
     @Inject
     KieRuntimeBuilder ruleRuntime;
 
-	@Inject
-	Service service;
+    @Inject
+    Service service;
 
-	KieSession ksession;
+    KieSession ksession;
 
-	/**
-	* Execute on start up.
-	*
-	* @param ev
-	 */
+    /**
+     * Execute on start up.
+     *
+     * @param ev
+     */
     void onStart(@Observes StartupEvent ev) {
 
-		service.fullServiceInit();
-		log.info("[*] Finished Startup!");
+        service.fullServiceInit();
+        log.info("[*] Finished Adi Startup!");
     }
 
-	/**
-	* Consume from the valid_data topic.
-	*
-	* @param data
-	 */
+    /**
+     * Consume from the valid_data topic.
+     *
+     * @param data
+     */
     @Incoming("valid_data")
     @Blocking
     public void getValidData(String data) {
@@ -69,9 +69,9 @@ public class InternalConsumer {
         log.infov("Incoming Valid Data : {}", data);
         Instant start = Instant.now();
 
-		BaseEntityUtils beUtils = service.getBeUtils();
-		GennyToken serviceToken = beUtils.getServiceToken();
-		GennyToken userToken = null;
+        BaseEntityUtils beUtils = service.getBeUtils();
+        GennyToken serviceToken = beUtils.getServiceToken();
+        GennyToken userToken = null;
 
         // deserialise to msg
         QDataAnswerMessage msg = jsonb.fromJson(data, QDataAnswerMessage.class);
@@ -88,26 +88,26 @@ public class InternalConsumer {
         // update the token of our utility
         beUtils.setGennyToken(userToken);
 
-		Answer answer = msg.getItems()[0];
-		Answers answersToSave = new Answers();
+        Answer answer = msg.getItems()[0];
+        Answers answersToSave = new Answers();
 
         // init session and activate DataProcessing
         KieSession ksession = ruleRuntime.newKieSession();
         ((InternalAgenda) ksession.getAgenda()).activateRuleFlowGroup("DataProcessing");
 
         // insert facts into session
-		ksession.insert(beUtils);
+        ksession.insert(beUtils);
         ksession.insert(serviceToken);
         ksession.insert(userToken);
-		ksession.insert(answer);
-		ksession.insert(answersToSave);
+        ksession.insert(answer);
+        ksession.insert(answersToSave);
 
         // fire rules and dispose of session
         ksession.fireAllRules();
         ksession.dispose();
 
-		// TODO: ensure that answersToSave has been updated by our rules
-		beUtils.saveAnswers(answersToSave);
+        // TODO: ensure that answersToSave has been updated by our rules
+        beUtils.saveAnswers(answersToSave);
 
         Instant end = Instant.now();
         log.info("Duration = " + Duration.between(start, end).toMillis() + "ms");
