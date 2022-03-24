@@ -1,6 +1,11 @@
 <factorypath>
+<<<<<<< HEAD
     <factorypathentry kind="VARJAR" id="M2_REPO/life/genny/serviceq/10.0.0/serviceq-10.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/life/genny/qwandaq/10.0.0/qwandaq-10.0.0.jar" enabled="true" runInBatchMode="false"/>
+=======
+    <factorypathentry kind="VARJAR" id="M2_REPO/life/genny/serviceq/10.1.0/serviceq-10.1.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/life/genny/qwandaq/10.1.0/qwandaq-10.1.0.jar" enabled="true" runInBatchMode="false"/>
+>>>>>>> 10.1.0
     <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-hibernate-orm/2.7.5.Final/quarkus-hibernate-orm-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-agroal/2.7.5.Final/quarkus-agroal-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-datasource/2.7.5.Final/quarkus-datasource-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
