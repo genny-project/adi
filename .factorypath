@@ -1,11 +1,6 @@
 <factorypath>
-<<<<<<< HEAD
     <factorypathentry kind="VARJAR" id="M2_REPO/life/genny/serviceq/10.0.0/serviceq-10.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/life/genny/qwandaq/10.0.0/qwandaq-10.0.0.jar" enabled="true" runInBatchMode="false"/>
-=======
-    <factorypathentry kind="VARJAR" id="M2_REPO/life/genny/serviceq/10.1.0/serviceq-10.1.0.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/life/genny/qwandaq/10.1.0/qwandaq-10.1.0.jar" enabled="true" runInBatchMode="false"/>
->>>>>>> 10.1.0
     <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-hibernate-orm/2.7.5.Final/quarkus-hibernate-orm-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-agroal/2.7.5.Final/quarkus-agroal-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-datasource/2.7.5.Final/quarkus-datasource-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
@@ -109,6 +104,11 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.13.1/jackson-dataformat-yaml-2.13.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/yaml/snakeyaml/1.30/snakeyaml-1.30.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-swagger-ui/2.7.5.Final/quarkus-swagger-ui-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-smallrye-jwt-build/2.7.5.Final/quarkus-smallrye-jwt-build-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/io/smallrye/smallrye-jwt-build/3.3.3/smallrye-jwt-build-3.3.3.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/microprofile/jwt/microprofile-jwt-auth-api/1.2/microprofile-jwt-auth-api-1.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/bitbucket/b_c/jose4j/0.7.9/jose4j-0.7.9.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/io/smallrye/smallrye-jwt-common/3.3.3/smallrye-jwt-common-3.3.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-infinispan-client/2.7.5.Final/quarkus-infinispan-client-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-netty/2.7.5.Final/quarkus-netty-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/netty/netty-codec/4.1.74.Final/netty-codec-4.1.74.Final.jar" enabled="true" runInBatchMode="false"/>
@@ -166,12 +166,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/io/smallrye/smallrye-fault-tolerance-vertx/5.2.1/smallrye-fault-tolerance-vertx-5.2.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-security/2.7.5.Final/quarkus-security-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-oidc-common/2.7.5.Final/quarkus-oidc-common-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/io/quarkus/quarkus-smallrye-jwt-build/2.7.5.Final/quarkus-smallrye-jwt-build-2.7.5.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/io/smallrye/smallrye-jwt-build/3.3.3/smallrye-jwt-build-3.3.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/smallrye/smallrye-jwt/3.3.3/smallrye-jwt-3.3.3.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/microprofile/jwt/microprofile-jwt-auth-api/1.2/microprofile-jwt-auth-api-1.2.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/bitbucket/b_c/jose4j/0.7.9/jose4j-0.7.9.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/io/smallrye/smallrye-jwt-common/3.3.3/smallrye-jwt-common-3.3.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/maven/shared/maven-shared-utils/3.3.4/maven-shared-utils-3.3.4.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/querydsl/querydsl-jpa/4.4.0/querydsl-jpa-4.4.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/querydsl/querydsl-core/4.4.0/querydsl-core-4.4.0.jar" enabled="true" runInBatchMode="false"/>
@@ -246,11 +241,11 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/io/smallrye/reactive/vertx-mutiny-generator/2.19.0/vertx-mutiny-generator-2.19.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/vertx/vertx-codegen/4.2.5/vertx-codegen-4.2.5.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/jakarta/annotation/jakarta.annotation-api/1.3.5/jakarta.annotation-api-1.3.5.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus/1.18.0.Final/kogito-quarkus-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus-common/1.18.0.Final/kogito-quarkus-common-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-application/1.18.0.Final/kogito-api-incubation-application-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-common/1.18.0.Final/kogito-api-incubation-common-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-common-objectmapper/1.18.0.Final/kogito-api-incubation-common-objectmapper-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus/1.19.0.Final/kogito-quarkus-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus-common/1.19.0.Final/kogito-quarkus-common-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-application/1.19.0.Final/kogito-api-incubation-application-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-common/1.19.0.Final/kogito-api-incubation-common-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-common-objectmapper/1.19.0.Final/kogito-api-incubation-common-objectmapper-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/mvel/mvel2/2.4.12.Final/mvel2-2.4.12.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/jayway/jsonpath/json-path/2.6.0/json-path-2.6.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/net/minidev/json-smart/2.4.7/json-smart-2.4.7.jar" enabled="true" runInBatchMode="false"/>
@@ -283,79 +278,79 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/ow2/asm/asm-util/9.2/asm-util-9.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/ow2/asm/asm-tree/9.2/asm-tree-9.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/ow2/asm/asm-analysis/9.2/asm-analysis-9.2.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus-rules/1.18.0.Final/kogito-quarkus-rules-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-rules-services/1.18.0.Final/kogito-api-incubation-rules-services-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-rules/1.18.0.Final/kogito-api-incubation-rules-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-drools/1.18.0.Final/kogito-drools-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-compiler/8.18.0.Beta/drools-compiler-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-drl-parser/8.18.0.Beta/drools-drl-parser-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-drl-extensions/8.18.0.Beta/drools-drl-extensions-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-drl-ast/8.18.0.Beta/drools-drl-ast-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-ecj/8.18.0.Beta/drools-ecj-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-util-maven-support/8.18.0.Beta/kie-util-maven-support-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus-rules/1.19.0.Final/kogito-quarkus-rules-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-rules-services/1.19.0.Final/kogito-api-incubation-rules-services-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-rules/1.19.0.Final/kogito-api-incubation-rules-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-drools/1.19.0.Final/kogito-drools-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-compiler/8.19.0.Beta/drools-compiler-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-drl-parser/8.19.0.Beta/drools-drl-parser-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-drl-extensions/8.19.0.Beta/drools-drl-extensions-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-drl-ast/8.19.0.Beta/drools-drl-ast-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-ecj/8.19.0.Beta/drools-ecj-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-util-maven-support/8.19.0.Beta/kie-util-maven-support-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-ruleunits-impl/8.18.0.Beta/drools-ruleunits-impl-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-model-compiler/8.18.0.Beta/drools-model-compiler-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-canonical-model/8.18.0.Beta/drools-canonical-model-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-ruleunits-impl/8.19.0.Beta/drools-ruleunits-impl-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-model-compiler/8.19.0.Beta/drools-model-compiler-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-canonical-model/8.19.0.Beta/drools-canonical-model-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/github/javaparser/javaparser-core/3.23.1/javaparser-core-3.23.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-mvel-parser/8.18.0.Beta/drools-mvel-parser-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-mvel-compiler/8.18.0.Beta/drools-mvel-compiler-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus-decisions/1.18.0.Final/kogito-quarkus-decisions-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-decisions-services/1.18.0.Final/kogito-api-incubation-decisions-services-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-decisions/1.18.0.Final/kogito-api-incubation-decisions-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-dmn/1.18.0.Final/kogito-dmn-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-core/8.18.0.Beta/kie-dmn-core-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-backend/8.18.0.Beta/kie-dmn-backend-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-mvel-parser/8.19.0.Beta/drools-mvel-parser-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-mvel-compiler/8.19.0.Beta/drools-mvel-compiler-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus-decisions/1.19.0.Final/kogito-quarkus-decisions-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-decisions-services/1.19.0.Final/kogito-api-incubation-decisions-services-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-decisions/1.19.0.Final/kogito-api-incubation-decisions-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-dmn/1.19.0.Final/kogito-dmn-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-core/8.19.0.Beta/kie-dmn-core-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-backend/8.19.0.Beta/kie-dmn-backend-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/thoughtworks/xstream/xstream/1.4.18/xstream-1.4.18.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/github/x-stream/mxparser/1.2.2/mxparser-1.2.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-feel/8.18.0.Beta/kie-dmn-feel-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-feel/8.19.0.Beta/kie-dmn-feel-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/ch/obermuhlner/big-math/2.0.1/big-math-2.0.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-alphanetwork-compiler/8.18.0.Beta/drools-alphanetwork-compiler-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-alphanetwork-compiler/8.19.0.Beta/drools-alphanetwork-compiler-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/antlr/antlr4-runtime/4.9.2/antlr4-runtime-4.9.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/jpmml/pmml-model/1.5.1/pmml-model-1.5.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/jpmml/pmml-agent/1.5.1/pmml-agent-1.5.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-validation/8.18.0.Beta/kie-dmn-validation-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus-predictions/1.18.0.Final/kogito-quarkus-predictions-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-pmml/1.18.0.Final/kogito-pmml-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-dependencies/8.18.0.Beta/kie-pmml-dependencies-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-compiler-api/8.18.0.Beta/kie-pmml-compiler-api-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-compiler-core/8.18.0.Beta/kie-pmml-compiler-core-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-compiler-commons/8.18.0.Beta/kie-pmml-compiler-commons-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-evaluator-core/8.18.0.Beta/kie-pmml-evaluator-core-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-evaluator-assembler/8.18.0.Beta/kie-pmml-evaluator-assembler-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-kie-internal/8.18.0.Beta/kie-pmml-kie-internal-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-drools-common/8.18.0.Beta/kie-pmml-models-drools-common-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-regression-model/8.18.0.Beta/kie-pmml-models-regression-model-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-regression-compiler/8.18.0.Beta/kie-pmml-models-regression-compiler-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-regression-evaluator/8.18.0.Beta/kie-pmml-models-regression-evaluator-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-tree-model/8.18.0.Beta/kie-pmml-models-tree-model-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-tree-compiler/8.18.0.Beta/kie-pmml-models-tree-compiler-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-tree-evaluator/8.18.0.Beta/kie-pmml-models-tree-evaluator-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-scorecard-model/8.18.0.Beta/kie-pmml-models-scorecard-model-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-scorecard-compiler/8.18.0.Beta/kie-pmml-models-scorecard-compiler-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-scorecard-evaluator/8.18.0.Beta/kie-pmml-models-scorecard-evaluator-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-mining-model/8.18.0.Beta/kie-pmml-models-mining-model-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-mining-compiler/8.18.0.Beta/kie-pmml-models-mining-compiler-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-mining-evaluator/8.18.0.Beta/kie-pmml-models-mining-evaluator-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-clustering-model/8.18.0.Beta/kie-pmml-models-clustering-model-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-clustering-compiler/8.18.0.Beta/kie-pmml-models-clustering-compiler-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-clustering-evaluator/8.18.0.Beta/kie-pmml-models-clustering-evaluator-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-predictions-services/1.18.0.Final/kogito-api-incubation-predictions-services-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-predictions/1.18.0.Final/kogito-api-incubation-predictions-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus-processes/1.18.0.Final/kogito-quarkus-processes-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-processes-services/1.18.0.Final/kogito-api-incubation-processes-services-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-processes/1.18.0.Final/kogito-api-incubation-processes-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/jbpm-bpmn2/1.18.0.Final/jbpm-bpmn2-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/jbpm-flow-builder/1.18.0.Final/jbpm-flow-builder-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-xml-support/8.18.0.Beta/drools-xml-support-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/jbpm-flow/1.18.0.Final/jbpm-flow-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/process-workitems/1.18.0.Final/process-workitems-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-validation/8.19.0.Beta/kie-dmn-validation-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus-predictions/1.19.0.Final/kogito-quarkus-predictions-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-pmml/1.19.0.Final/kogito-pmml-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-dependencies/8.19.0.Beta/kie-pmml-dependencies-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-compiler-api/8.19.0.Beta/kie-pmml-compiler-api-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-compiler-core/8.19.0.Beta/kie-pmml-compiler-core-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-compiler-commons/8.19.0.Beta/kie-pmml-compiler-commons-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-evaluator-core/8.19.0.Beta/kie-pmml-evaluator-core-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-evaluator-assembler/8.19.0.Beta/kie-pmml-evaluator-assembler-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-kie-internal/8.19.0.Beta/kie-pmml-kie-internal-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-drools-common/8.19.0.Beta/kie-pmml-models-drools-common-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-regression-model/8.19.0.Beta/kie-pmml-models-regression-model-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-regression-compiler/8.19.0.Beta/kie-pmml-models-regression-compiler-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-regression-evaluator/8.19.0.Beta/kie-pmml-models-regression-evaluator-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-tree-model/8.19.0.Beta/kie-pmml-models-tree-model-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-tree-compiler/8.19.0.Beta/kie-pmml-models-tree-compiler-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-tree-evaluator/8.19.0.Beta/kie-pmml-models-tree-evaluator-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-scorecard-model/8.19.0.Beta/kie-pmml-models-scorecard-model-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-scorecard-compiler/8.19.0.Beta/kie-pmml-models-scorecard-compiler-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-scorecard-evaluator/8.19.0.Beta/kie-pmml-models-scorecard-evaluator-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-mining-model/8.19.0.Beta/kie-pmml-models-mining-model-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-mining-compiler/8.19.0.Beta/kie-pmml-models-mining-compiler-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-mining-evaluator/8.19.0.Beta/kie-pmml-models-mining-evaluator-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-clustering-model/8.19.0.Beta/kie-pmml-models-clustering-model-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-clustering-compiler/8.19.0.Beta/kie-pmml-models-clustering-compiler-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-models-clustering-evaluator/8.19.0.Beta/kie-pmml-models-clustering-evaluator-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-predictions-services/1.19.0.Final/kogito-api-incubation-predictions-services-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-predictions/1.19.0.Final/kogito-api-incubation-predictions-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-quarkus-processes/1.19.0.Final/kogito-quarkus-processes-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-processes-services/1.19.0.Final/kogito-api-incubation-processes-services-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api-incubation-processes/1.19.0.Final/kogito-api-incubation-processes-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/jbpm-bpmn2/1.19.0.Final/jbpm-bpmn2-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/jbpm-flow-builder/1.19.0.Final/jbpm-flow-builder-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-xml-support/8.19.0.Beta/drools-xml-support-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/jbpm-flow/1.19.0.Final/jbpm-flow-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/process-workitems/1.19.0.Final/process-workitems-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/github/javaparser/javaparser-symbol-solver-core/3.23.1/javaparser-symbol-solver-core-3.23.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/javassist/javassist/3.28.0-GA/javassist-3.28.0-GA.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-mvel/8.18.0.Beta/drools-mvel-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/process-serialization-protobuf/1.18.0.Final/process-serialization-protobuf-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-jackson-utils/1.18.0.Final/kogito-jackson-utils-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-mvel/8.19.0.Beta/drools-mvel-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/process-serialization-protobuf/1.19.0.Final/process-serialization-protobuf-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-jackson-utils/1.19.0.Final/kogito-jackson-utils-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/google/protobuf/protobuf-java/3.19.3/protobuf-java-3.19.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/google/protobuf/protobuf-java-util/3.19.3/protobuf-java-util-3.19.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/google/errorprone/error_prone_annotations/2.10.0/error_prone_annotations-2.10.0.jar" enabled="true" runInBatchMode="false"/>
@@ -369,32 +364,32 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/io/smallrye/reactive/smallrye-mutiny-vertx-auth-common/2.19.0/smallrye-mutiny-vertx-auth-common-2.19.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/smallrye/reactive/smallrye-mutiny-vertx-web-common/2.19.0/smallrye-mutiny-vertx-web-common-2.19.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/microprofile/openapi/microprofile-openapi-api/2.0.1/microprofile-openapi-api-2.0.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-legacy-api/1.18.0.Final/kogito-legacy-api-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-legacy-api/1.19.0.Final/kogito-legacy-api-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/slf4j/slf4j-api/1.7.33/slf4j-api-1.7.33.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api/1.18.0.Final/kogito-api-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-api/1.19.0.Final/kogito-api-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/fasterxml/jackson/core/jackson-annotations/2.13.1/jackson-annotations-2.13.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-api/8.18.0.Beta/kie-api-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-ruleunits-api/8.18.0.Beta/drools-ruleunits-api-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-api/8.18.0.Beta/kie-dmn-api-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-model/8.18.0.Beta/kie-dmn-model-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-timer/1.18.0.Final/kogito-timer-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-evaluator-api/8.18.0.Beta/kie-pmml-evaluator-api-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-api/8.18.0.Beta/kie-pmml-api-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-api/8.19.0.Beta/kie-api-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-ruleunits-api/8.19.0.Beta/drools-ruleunits-api-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-api/8.19.0.Beta/kie-dmn-api-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-dmn-model/8.19.0.Beta/kie-dmn-model-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-timer/1.19.0.Final/kogito-timer-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-evaluator-api/8.19.0.Beta/kie-pmml-evaluator-api-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-api/8.19.0.Beta/kie-pmml-api-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/commons/commons-math3/3.4.1/commons-math3-3.4.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-commons/8.18.0.Beta/kie-pmml-commons-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-core/8.18.0.Beta/drools-core-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-internal/8.18.0.Beta/kie-internal-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-util-xml/8.18.0.Beta/kie-util-xml-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-wiring-api/8.18.0.Beta/drools-wiring-api-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-memory-compiler/8.18.0.Beta/kie-memory-compiler-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-wiring-static/8.18.0.Beta/drools-wiring-static-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-pmml-commons/8.19.0.Beta/kie-pmml-commons-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-core/8.19.0.Beta/drools-core-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-internal/8.19.0.Beta/kie-internal-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-util-xml/8.19.0.Beta/kie-util-xml-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-wiring-api/8.19.0.Beta/drools-wiring-api-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kie-memory-compiler/8.19.0.Beta/kie-memory-compiler-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-wiring-static/8.19.0.Beta/drools-wiring-static-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/commons-codec/commons-codec/1.15/commons-codec-1.15.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-kiesession/8.18.0.Beta/drools-kiesession-8.18.0.Beta.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-addons-quarkus-messaging/1.18.0.Final/kogito-addons-quarkus-messaging-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-addons-quarkus-messaging-common/1.18.0.Final/kogito-addons-quarkus-messaging-common-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-addons-messaging/1.18.0.Final/kogito-addons-messaging-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-events-api/1.18.0.Final/kogito-events-api-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-services/1.18.0.Final/kogito-services-1.18.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/drools/drools-kiesession/8.19.0.Beta/drools-kiesession-8.19.0.Beta.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-addons-quarkus-messaging/1.19.0.Final/kogito-addons-quarkus-messaging-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-addons-quarkus-messaging-common/1.19.0.Final/kogito-addons-quarkus-messaging-common-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-addons-messaging/1.19.0.Final/kogito-addons-messaging-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-events-api/1.19.0.Final/kogito-events-api-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kie/kogito/kogito-services/1.19.0.Final/kogito-services-1.19.0.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/fasterxml/jackson/core/jackson-databind/2.13.1/jackson-databind-2.13.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.13.1/jackson-core-2.13.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/microprofile/config/microprofile-config-api/2.0.1/microprofile-config-api-2.0.1.jar" enabled="true" runInBatchMode="false"/>

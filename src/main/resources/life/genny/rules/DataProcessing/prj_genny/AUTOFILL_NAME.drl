@@ -86,8 +86,8 @@ then
 		String questionCode="";
 		if(attributeCode.equals("PRI_NAME")) questionCode="QUE_TRADING_NAME";
 		if(attributeCode.equals("PRI_LEGAL_NAME")) questionCode="QUE_LEGAL_NAME";
-
-		QDataAskMessage askMsg = QuestionUtils.getAsks(userToken.getUserCode(), targetCode, "QUE_HOST_CPY_GRP", beUtils);
+		QuestionUtils questionUtils = new QuestionUtils();
+		QDataAskMessage askMsg = questionUtils.getAsks(userToken.getUserCode(), targetCode, "QUE_HOST_CPY_GRP", beUtils);
 		if (askMsg != null) {
 
 			Ask[] items = askMsg.getItems();
